@@ -1,14 +1,14 @@
 package com.helicoptera.cga.parser.parser
 
-import com.helicoptera.cga.parser.entity.PolygonEntity
-import com.helicoptera.cga.parser.entity.VertexEntity
+import com.helicoptera.cga.parser.model.Polygon
+import com.helicoptera.cga.parser.model.Vertex
 
 internal class PolygonParser {
 
     private val vertexParser = VertexParser()
 
-    internal fun parsePolygon(source: String): PolygonEntity {
-        val vertexes = mutableListOf<VertexEntity>()
+    internal fun parsePolygon(source: String): Polygon {
+        val vertexes = mutableListOf<Vertex>()
 
         val values = source.split(VALUES_DELIMITER)
         for (value in values) {
@@ -16,7 +16,7 @@ internal class PolygonParser {
             vertexes.add(vertex)
         }
 
-        return PolygonEntity(vertexes)
+        return Polygon(vertexes)
     }
 
     companion object {

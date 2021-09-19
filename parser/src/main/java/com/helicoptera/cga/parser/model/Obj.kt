@@ -1,8 +1,18 @@
 package com.helicoptera.cga.parser.model
 
 class Obj(
-    val vertexesCoordinates: List<VertexCoordinates>,
+    val vertexesCoordinates: MutableList<VertexCoordinates>,
     val textureVertexes: List<TextureVertex>,
     val normalVectors: List<Vector>,
     val polygons: List<Polygon>
-)
+) : Cloneable {
+
+    public override fun clone(): Obj {
+        return Obj(
+            vertexesCoordinates.map { vertexCoordinates ->  vertexCoordinates.clone()}.toMutableList(),
+            textureVertexes.map { textureVertex ->  textureVertex.clone()},
+            normalVectors.map { normalVector ->  normalVector.clone()},
+            polygons.map { polygon ->  polygon.clone()},
+        )
+    }
+}

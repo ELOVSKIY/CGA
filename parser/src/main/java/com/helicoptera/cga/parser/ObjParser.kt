@@ -1,12 +1,7 @@
 package com.helicoptera.cga.parser
 
-import com.helicoptera.cga.parser.entity.PolygonEntity
 import com.helicoptera.cga.parser.exception.ParseException
-import com.helicoptera.cga.parser.mapper.PolygonMapper
-import com.helicoptera.cga.parser.model.Vector
-import com.helicoptera.cga.parser.model.Obj
-import com.helicoptera.cga.parser.model.TextureVertex
-import com.helicoptera.cga.parser.model.VertexCoordinates
+import com.helicoptera.cga.parser.model.*
 import com.helicoptera.cga.parser.parser.NormalVectorParser
 import com.helicoptera.cga.parser.parser.PolygonParser
 import com.helicoptera.cga.parser.parser.TextureVertexParser
@@ -18,11 +13,10 @@ class ObjParser {
     private val textureVertexParser = TextureVertexParser()
     private val vertexCoordinatesParser = VertexCoordinatesParser()
     private val polygonParser = PolygonParser()
-    private val polygonMapper = PolygonMapper()
 
     fun parseObj(source: String): Obj {
         val normalVectors = mutableListOf<Vector>()
-        val polygonsEntities = mutableListOf<PolygonEntity>()
+        val polygons = mutableListOf<Polygon>()
         val texturesVertexes = mutableListOf<TextureVertex>()
         val vertexesCoordinates = mutableListOf<VertexCoordinates>()
 
@@ -51,7 +45,7 @@ class ObjParser {
                         }
                         POLYGON_PREFIX -> {
                             val polygonEntity = polygonParser.parsePolygon(processedValue)
-                            polygonsEntities.add(polygonEntity)
+                            polygons.add(polygonEntity)
                         }
                         else -> {
                             throw ParseException("Invalid object prefix: $prefix")
@@ -60,14 +54,6 @@ class ObjParser {
                 }
             }
 
-            val polygons = polygonsEntities.map {
-                polygonMapper.convertPolygonEntityToModel(
-                    it,
-                    vertexesCoordinates,
-                    texturesVertexes,
-                    normalVectors
-                )
-            }
             return Obj(vertexesCoordinates, texturesVertexes, normalVectors, polygons)
         } catch (parseException: ParseException) {
             throw parseException

@@ -1,7 +1,11 @@
 package com.helicoptera.cga.parser.model
 
 data class Vertex(
-    val vertexCoordinates: VertexCoordinates,
-    val textureVertex: TextureVertex? = null,
-    val normalVector: Vector? = null
-)
+    val vertexCoordinatesIndex: Int,
+    val textureVertex: Int? = null,
+    val normalVector: Int? = null
+) : Cloneable {
+    public override fun clone(): Vertex {
+        return Vertex(vertexCoordinatesIndex, textureVertex, normalVector)
+    }
+}
